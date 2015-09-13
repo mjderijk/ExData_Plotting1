@@ -24,9 +24,13 @@ if(!file.exists(myFileName)) {unzip("exdata-data-household_power_consumption.zip
 # described by Chad Junkermeier, found at:
 # https://class.coursera.org/exdata-032/forum/thread?thread_id=5#post-32
 
+# first, read the header of our data
+myHeader <- read.table(myFileName, header = TRUE, sep = ";", nrows = 1)
 # create a grep expression (so that we can use the dynamically stored filename in 'myFileName')
 grepExpression <- paste0("grep ", "\"^[1-2]/2/2007\"", " \"", myFileName, "\"")
-smlData <- read.table(pipe(grepExpression), header = TRUE, sep = ";", na.strings = "?", stringsAsFactors = FALSE)
+myData <- read.table(pipe(grepExpression), sep = ";", na.strings = "?", stringsAsFactors = FALSE)
+# copy the column names from myHeader to myData
+names(myData) <- names(myHeader)
 # and finally set the working directory back to where this script is located...
 setwd("../ExData_Plotting1")
 
@@ -35,13 +39,16 @@ setwd("../ExData_Plotting1")
 myData$Date <- as.Date(myData$Date, format = "%d/%m/%Y")
 # use the dplyr package to combine the Date and Time columns
 library("dplyr")
-myDataSubset <- mutate(myDataSubset, DateTime = paste(Date,Time))
+myData <- mutate(myData, DateTime = paste(Date,Time))
 # now use strptime to convert DateTime to POSIXlt
-myDataSubset$DateTime <- strptime(myDataSubset$DateTime, "%Y-%m-%d %H:%M:%S")
+myData$DateTime <- strptime(myData$DateTime, "%Y-%m-%d %H:%M:%S")
 
 ## now we create the required plot: multiple base plots, in a 2 x 2 layout.
+## note: I've added x-labels for all four plots (by not specifying xlab = "")
+## I've also cleaned up the y-label in the last plot, rather than leaving it as default.
+
 # first, open png device; create 'plot4.png' in the working directory
-# png(file = "plot4.png")
+png(file = "plot4.png")
 
 # create plot and send to the file
 # first set up the plot so we can add multiple base plots to it - we're using plots from
@@ -49,31 +56,30 @@ myDataSubset$DateTime <- strptime(myDataSubset$DateTime, "%Y-%m-%d %H:%M:%S")
 par(mfcol = c(2,2))
 
 # now, start plotting!
-with(myDataSubset, {
-# first plot: original plot2
-plot(DateTime, Global_active_power, type = "l", ylab = "Global Active Power (kilowatts)")
+with(myData, {
+        # first plot: original plot2
+        plot(DateTime, Global_active_power, type = "l", ylab = "Global Active Power (kilowatts)")
 
-# second plot: original plot3
-# first set up the plot so we can add multiple point sets to it, by setting the plot type = "n"
-plot(DateTime,Sub_metering_1, ylab = "Energy sub metering", type = "n")
-# now add each point set: Sub_meter 1, 2 and 3:
-points(DateTime,Sub_metering_1, col = "black", type = "l")
-points(DateTime,Sub_metering_2, col = "red", type = "l")
-points(DateTime,Sub_metering_3, col = "blue", type = "l")
-# lastly, add the legend:
-legend("topright", lty = 1, bty = "n", col = c("black", "red", "blue"), legend = c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"))
+        # second plot: original plot3
+        # first set up the plot so we can add multiple point sets to it, by setting the plot type = "n"
+        plot(DateTime,Sub_metering_1, ylab = "Energy sub metering", type = "n")
+        # now add each point set: Sub_meter 1, 2 and 3:
+        points(DateTime,Sub_metering_1, col = "black", type = "l")
+        points(DateTime,Sub_metering_2, col = "red", type = "l")
+        points(DateTime,Sub_metering_3, col = "blue", type = "l")
+        # lastly, add the legend:
+        legend("topright", lty = 1, bty = "n", col = c("black", "red", "blue"), legend = c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"))
 
-# third plot:
-plot(DateTime, Voltage, type = "l", ylab = "Voltage")
+        # third plot:
+        plot(DateTime, Voltage, type = "l", ylab = "Voltage")
 
-# fourth plot:
-plot(DateTime, Global_reactive_power, type = "l", ylab = "Global Reactive Power")
+        # fourth plot:
+        plot(DateTime, Global_reactive_power, type = "l", ylab = "Global Reactive Power")
 
-# finish the plot:
 } )
 
 # now close the png device.
-# dev.off()
+dev.off()
 
 ## finally, restore our working directory...
 setwd(current_wd)

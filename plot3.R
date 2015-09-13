@@ -43,14 +43,22 @@ myData <- mutate(myData, DateTime = paste(Date,Time))
 # now use strptime to convert DateTime to POSIXlt
 myData$DateTime <- strptime(myData$DateTime, "%Y-%m-%d %H:%M:%S")
 
-# now create our plot: a plot using lines.
-# first, open png device; create 'plot2.png' in the working directory
-png(file = "plot2.png")
-# create plot and send it to the png file
+## now create the required plot: a three-data set plot.
+# first, open png device; create 'plot3.png' in the working directory
+png(file = "plot3.png")
+
+# create plot and send to the file
 with(myData, {
-        plot(DateTime, Global_active_power, type = "l", xlab = "", ylab = "Global Active Power (kilowatts)")
+        # first set up the plot so we can add multiple point sets to it, by setting the plot type = "n"
+        plot(DateTime,Sub_metering_1, xlab = "", ylab = "Energy sub metering", type = "n")
+        # now add each point set: Sub_meter 1, 2 and 3:
+        points(DateTime,Sub_metering_1, col = "black", type = "l")
+        points(DateTime,Sub_metering_2, col = "red", type = "l")
+        points(DateTime,Sub_metering_3, col = "blue", type = "l")
+        # lastly, add the legend:
+        legend("topright", lty = c(1,1,1), col = c("black", "red", "blue"), legend = c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"))
 } )
-# close the png file!
+# now close the png device.
 dev.off()
 
 ## finally, restore our working directory...
