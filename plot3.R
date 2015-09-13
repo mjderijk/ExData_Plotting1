@@ -1,5 +1,5 @@
 ## This R Script uses the base plotting system to examine how household energy usage varies 
-## over a 2-day period in February, 2007.
+## over a 2-day period in February, 2007. 
 
 ## store current working directory for later, and set the working directory
 current_wd <- getwd()
