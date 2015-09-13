@@ -44,8 +44,6 @@ myData <- mutate(myData, DateTime = paste(Date,Time))
 myData$DateTime <- strptime(myData$DateTime, "%Y-%m-%d %H:%M:%S")
 
 ## now we create the required plot: multiple base plots, in a 2 x 2 layout.
-## note: I've added x-labels for all four plots (by not specifying xlab = "")
-## I've also cleaned up the y-label in the last plot, rather than leaving it as default.
 
 # first, open png device; create 'plot4.png' in the working directory
 png(file = "plot4.png")
@@ -58,11 +56,11 @@ par(mfcol = c(2,2))
 # now, start plotting!
 with(myData, {
         # first plot: original plot2
-        plot(DateTime, Global_active_power, type = "l", ylab = "Global Active Power (kilowatts)")
+        plot(DateTime, Global_active_power, type = "l", xlab = "", ylab = "Global Active Power (kilowatts)")
 
         # second plot: original plot3
         # first set up the plot so we can add multiple point sets to it, by setting the plot type = "n"
-        plot(DateTime,Sub_metering_1, ylab = "Energy sub metering", type = "n")
+        plot(DateTime,Sub_metering_1, xlab = "", ylab = "Energy sub metering", type = "n")
         # now add each point set: Sub_meter 1, 2 and 3:
         points(DateTime,Sub_metering_1, col = "black", type = "l")
         points(DateTime,Sub_metering_2, col = "red", type = "l")
@@ -71,10 +69,10 @@ with(myData, {
         legend("topright", lty = 1, bty = "n", col = c("black", "red", "blue"), legend = c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"))
 
         # third plot:
-        plot(DateTime, Voltage, type = "l", ylab = "Voltage")
+        plot(DateTime, Voltage, type = "l", xlab = "datetime", ylab = "Voltage")
 
         # fourth plot:
-        plot(DateTime, Global_reactive_power, type = "l", ylab = "Global Reactive Power")
+        plot(DateTime, Global_reactive_power, type = "l", xlab = "datetime")
 
 } )
 
