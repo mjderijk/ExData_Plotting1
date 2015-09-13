@@ -50,7 +50,7 @@ png(file = "plot3.png")
 # create plot and send to the file
 with(myData, {
         # first set up the plot so we can add multiple point sets to it, by setting the plot type = "n"
-        plot(DateTime,Sub_metering_1, xlab = "", ylab = "Energy sub metering", type = "n")
+        plot(DateTime,Sub_metering_1, xlab = "", ylab = "Energy sub metering ", type = "n")
         # now add each point set: Sub_meter 1, 2 and 3:
         points(DateTime,Sub_metering_1, col = "black", type = "l")
         points(DateTime,Sub_metering_2, col = "red", type = "l")

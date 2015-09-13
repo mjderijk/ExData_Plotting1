@@ -48,7 +48,7 @@ myData$DateTime <- strptime(myData$DateTime, "%Y-%m-%d %H:%M:%S")
 png(file = "plot2.png")
 # create plot and send it to the png file
 with(myData, {
-        plot(DateTime, Global_active_power, type = "l", xlab = "", ylab = "Global Active Power (kilowatts)")
+        plot(DateTime, Global_active_power, type = "l", xlab = "", ylab = "Global Active Power (kilowatts) ")
 } )
 # close the png file!
 dev.off()

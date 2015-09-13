@@ -47,7 +47,7 @@ myData$DateTime <- strptime(myData$DateTime, "%Y-%m-%d %H:%M:%S")
 # first, open png device; create 'plot1.png' in the working directory
 png(file = "plot1.png")
 # create histogram and send it to the file
-hist(myData$Global_active_power, col = "red", main = "Global Active Power", xlab = "Global Active Power (kilowatts)")
+hist(myData$Global_active_power, col = "red", main = "Global Active Power", xlab = "Global Active Power (kilowatts) ")
 # close the png file!
 dev.off()
 
