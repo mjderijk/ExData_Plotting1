@@ -51,5 +51,6 @@ hist(myData$Global_active_power, col = "red", main = "Global Active Power", xlab
 # close the png file!
 dev.off()
 
-## still need to restore our working directory...
+## finally, restore our working directory...
+setwd(current_wd)
 
